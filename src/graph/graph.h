@@ -8,11 +8,13 @@
 #include "../coord/coord.h"
 
 typedef struct {
-    size_t vertices_num;
+    int32_t vertices_num;
     Coord *vertices;
 } Graph;
 
 Graph *Graph_new(int32_t vertices_num);
+void Graph_free(Graph *graph);
+
 void Graph_set(Graph *graph, size_t i, Coord value);
 Coord Graph_get(Graph *graph, size_t i);
 

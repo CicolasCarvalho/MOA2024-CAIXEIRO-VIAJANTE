@@ -85,8 +85,6 @@ static HeaderInfo parse_header(FILE *file) {
         }
     }
 
-    OUTPUT("Graph Dimension: %i\n", header_info.dimension);
-
     return header_info;
 }
 
@@ -109,10 +107,10 @@ static void parse_graph(FILE *file, Graph *graph) {
                 if (graph_line->body_end) {
                     body_end = true;
                 } else if (graph_line->i > 0) {
-                    OUTPUT("%i: {x = %i, y = %i}\n", graph_line->i - 1, graph_line->x, graph_line->y);
+                    PRINT("%i: {x = %i, y = %i}\n", graph_line->i - 1, graph_line->x, graph_line->y);
                     Graph_set(graph, graph_line->i - 1, (Coord){
-                            .x = graph_line->x,
-                            .y = graph_line->y
+                        .x = graph_line->x,
+                        .y = graph_line->y
                     });
                 }
             }

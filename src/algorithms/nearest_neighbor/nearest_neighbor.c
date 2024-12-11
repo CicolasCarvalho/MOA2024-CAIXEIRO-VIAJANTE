@@ -1,4 +1,4 @@
-#include "nearest.h"
+#include "nearest_neighbor.h"
 
 //-declarations---------------------------------------------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ Path *build_nearest_neighbor(Graph *graph, size_t from) {
 
     size_t actual_idx = from;
 
-    for (size_t i = 0; i < graph->vertices_num; ++i) {
+    for (size_t i = 0; i < (size_t)graph->vertices_num; ++i) {
         nearest_step(path, actual_idx);
     }
 
@@ -26,7 +26,7 @@ static size_t nearest_step(Path *path, size_t source_idx) {
     size_t lowest_idx = 0;
     double lowest_distance = DBL_MAX;
 
-    for (size_t i = 0; i < path->graph->vertices_num; ++i) {
+    for (size_t i = 0; i < (size_t)path->graph->vertices_num; ++i) {
         if (i == source_idx || Path_has(path, i)) continue;
 
         Coord i_coord = Graph_get(path->graph, i);

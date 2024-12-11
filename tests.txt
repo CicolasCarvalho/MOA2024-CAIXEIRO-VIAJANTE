@@ -1,0 +1,23 @@
+Graph Size: 100
+
+Nearest Insertion:
+---#----------#---
+Tempo decorrido: 0.009687s
+
+Graph Size: 280
+
+Nearest Insertion:
+---#----------#---
+Tempo decorrido: 0.093892s
+
+Graph Size: 532
+
+Nearest Insertion:
+---#----------#---
+Tempo decorrido: 0.587058s
+
+Graph Size: 1173
+
+Nearest Insertion:
+---#----------#---
+Tempo decorrido: 6.307096s
