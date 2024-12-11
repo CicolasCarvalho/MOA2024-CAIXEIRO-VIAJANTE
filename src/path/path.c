@@ -1,11 +1,13 @@
 #include "path.h"
 
-Path *Path_new(Graph *graph) {
+Path *Path_new(Graph *graph, size_t starting_point) {
     Path *path = malloc(sizeof(Path));
 
     path->graph = graph;
     path->length = 0;
     path->vertices = malloc(sizeof(int32_t) * (graph->vertices_num - 1));
+    path->starting_point = starting_point;
+    path->distance = 0;
 
     return path;
 }

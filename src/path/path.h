@@ -12,10 +12,11 @@ typedef struct {
     size_t length;
     size_t *vertices;
 
+    size_t starting_point;
     double distance;
 } Path;
 
-Path *Path_new(Graph *graph);
+Path *Path_new(Graph *graph, size_t starting_point);
 void Path_append(Path *path, size_t from_idx, size_t to_idx);
 bool Path_has(Path *path, size_t idx);
 

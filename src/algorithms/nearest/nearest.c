@@ -7,16 +7,14 @@ static size_t nearest_step(Path *path, size_t source_idx);
 //-functions------------------------------------------------------------------------------------------------------------
 
 Path *build_nearest_neighbor(Graph *graph, size_t from) {
-    Path *path = Path_new(graph);
+    Path *path = Path_new(graph, from);
 
     size_t actual_idx = from;
 
     for (size_t i = 0; i < graph->vertices_num; ++i) {
-        size_t lowest_idx = nearest_step(path, actual_idx);
-
-        PRINT("(%i) -> (%i)", actual_idx, lowest_idx);
+        nearest_step(path, actual_idx);
     }
-    
+
     return path;
 }
 

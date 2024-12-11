@@ -1,10 +1,10 @@
 #include "graph.h"
 
 Graph *Graph_new(int32_t vertices_num) {
-    Graph *grafo = malloc(sizeof *grafo);
+    Graph *grafo = malloc(sizeof(Graph));
 
     grafo->vertices_num = vertices_num;
-    grafo->vertices = calloc(vertices_num * vertices_num, sizeof *grafo->vertices);
+    grafo->vertices = calloc(vertices_num, sizeof(Coord));
 
     return grafo;
 }

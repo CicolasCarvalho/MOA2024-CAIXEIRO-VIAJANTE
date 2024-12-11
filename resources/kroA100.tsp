@@ -1,4 +1,4 @@
-NAME: kroA100
+  NAME: kroA100
 TYPE: TSP
 COMMENT: 100-city problem A (Krolak/Felts/Nelson)
 DIMENSION: 100

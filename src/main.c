@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    char *flag = malloc(MAX_TOKEN_SIZE);
+    char *flag;
     if (argc > 1) {
         flag = shift_arg(&argc, &argv);
     }
@@ -23,12 +23,12 @@ int main(int argc, char **argv) {
     Graph *graph = graph_from_tsp(path);
 
     if (strcmp(flag, "--nearest") == 0) {
-        START_LOG("nearest");
+        START_LOG("nearest insertion");
         build_nearest_neighbor(graph, 0);
-        END_LOG("nearest");
+        END_LOG("nearest insertion");
     }
 
-    free(flag);
+    // free(flag);
 
     return 0;
 }
