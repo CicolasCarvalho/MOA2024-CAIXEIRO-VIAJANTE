@@ -13,12 +13,15 @@ static Edge *Edge_new(size_t vertex, double distance) {
     return edge;
 }
 
+static void Path_add_vertex_to_map(Path *path, size_t idx);
+
 //-functions------------------------------------------------------------------------------------------------------------
 
 
 Path *Path_new(Graph *graph, size_t starting_point) {
     Path *path = malloc(sizeof(Path));
 
+    path->inclusion_map = calloc(graph->vertices_num, sizeof(char));
     path->graph = graph;
     path->length = 0;
     path->first_edge = NULL;
@@ -53,6 +56,7 @@ void Path_append(Path *path, size_t to_idx, double distance) {
 
     path->first_edge->previous = new_edge;
 
+    Path_add_vertex_to_map(path, to_idx);
     path->length++;
 }
 
@@ -86,21 +90,26 @@ void Path_insert(Path *path, size_t index, size_t to_idx, double distance) {
 
     if (index == 0) path->first_edge = new_edge;
 
+    Path_add_vertex_to_map(path, to_idx);
     path->length++;
 }
 
 bool Path_has(Path *path, size_t idx) {
-    if (path->first_edge == NULL) return false;
+    size_t inclusion_idx = idx / 8;
+    char chunk = path->inclusion_map[inclusion_idx];
+    return chunk & (0b1 << (idx % 8));
 
-    Edge *actual = path->first_edge;
-
-    do {
-        if (actual->vertex == idx) return true;
-
-        actual = actual->next;
-    } while(actual != path->first_edge);
-
-    return false;
+    // if (path->first_edge == NULL) return false;
+    //
+    // Edge *actual = path->first_edge;
+    //
+    // do {
+    //     if (actual->vertex == idx) return true;
+    //
+    //     actual = actual->next;
+    // } while(actual != path->first_edge);
+    //
+    // return false;
 }
 
 void Path_print(Path *path) {
@@ -117,4 +126,12 @@ void Path_print(Path *path) {
     OUTPUT("(%li)\n", actual->vertex);
 
     END_LOG("path");
+}
+
+//-static---------------------------------------------------------------------------------------------------------------
+
+static void Path_add_vertex_to_map(Path *path, size_t idx) {
+    size_t inclusion_idx = idx / 8;
+    char *chunk = &path->inclusion_map[inclusion_idx];
+    (*chunk) |= (0b1 << (idx % 8));
 }

@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
     shift_arg(&argc, &argv);
 
     if (argc <= 1) {
-        LOG("Esperado um argumento contendo o arquivo de entrada\n./main [--nearest_neighbor|] <caminho>\n");
+        LOG("Esperado um argumento contendo o arquivo de entrada\n./main [--nearest_neighbor|--nearest_insertion] <caminho>\n");
         return 0;
     }
 

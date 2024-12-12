@@ -35,7 +35,7 @@ static size_t get_closest_vertex(Graph *graph, Path *path) {
     double lowest_distance = DBL_MAX;
 
     for (size_t i = 0; i < (size_t)graph->vertices_num; ++i) {
-        // if (Path_has(path, i)) continue;
+        if (Path_has(path, i)) continue;
 
         Coord i_coord = Graph_get(graph, i);
         Edge *actual = path->first_edge;

@@ -17,6 +17,7 @@ struct Edge {
 
 typedef struct {
     Graph *graph;
+    char *inclusion_map;
 
     int32_t length;
     Edge *first_edge;
