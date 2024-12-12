@@ -6,21 +6,27 @@
 
 #include "../graph/graph.h"
 
+typedef struct Edge Edge;
+
+struct Edge {
+    size_t vertex;
+    double distance;
+    Edge *next;
+    Edge *previous;
+};
+
 typedef struct {
     Graph *graph;
 
     int32_t length;
-    size_t *vertices;
-
-    size_t starting_point;
-    double distance;
+    Edge *first_edge;
 } Path;
 
 Path *Path_new(Graph *graph, size_t starting_point);
 void Path_free(Path *path);
 
-void Path_append(Path *path, size_t from_idx, size_t to_idx);
-void Path_insert(Path *path, size_t index, size_t to_idx);
+void Path_append(Path *path, size_t to_idx, double distance);
+void Path_insert(Path *path, size_t index, size_t to_idx, double distance);
 bool Path_has(Path *path, size_t idx);
 void Path_print(Path *path);
 

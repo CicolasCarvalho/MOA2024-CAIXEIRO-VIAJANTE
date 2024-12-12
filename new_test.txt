@@ -1,0 +1,6 @@
+Graph Size: 5
+
+Nearest Insertion:
+---#----------#---
+
+Tempo decorrido: 0.000008s

@@ -9,14 +9,20 @@ static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx);
 
 Path *build_nearest_insertion(Graph *graph, size_t from) {
     Path *path = Path_new(graph, from);
-    // TODO: check vertice bounds
-    Path_append(path, from, from + 1);
-    Path_append(path, from + 1, from + 2);
-    Path_append(path, from + 2, from);
+    Path_append(path, from + 1, Coord_distance(
+            Graph_get(graph, from),
+            Graph_get(graph, from + 1)
+    ));
+    Path_append(path, from + 2, Coord_distance(
+        Graph_get(graph, from + 1),
+        Graph_get(graph, from + 2)
+    ));
 
     while(path->length < graph->vertices_num) {
         size_t closest_idx = get_closest_vertex(graph, path);
+        PRINT("closest: %li", closest_idx);
         insertion_step(graph, path, closest_idx);
+        // Path_print(path);
     }
 
     return path;
@@ -29,18 +35,26 @@ static size_t get_closest_vertex(Graph *graph, Path *path) {
     double lowest_distance = DBL_MAX;
 
     for (size_t i = 0; i < (size_t)graph->vertices_num; ++i) {
-        Coord i_coord = Graph_get(graph, i);
-        if (Path_has(path, i)) continue;
+        // if (Path_has(path, i)) continue;
 
-        for (size_t j = 0; j < (size_t)path->length; ++j) {
-            Coord j_coord = Graph_get(graph, j);
+        Coord i_coord = Graph_get(graph, i);
+        Edge *actual = path->first_edge;
+
+        do {
+            if (i == actual->vertex) break;
+
+            Coord j_coord = Graph_get(graph, actual->vertex);
             double distance = Coord_distance(i_coord, j_coord);
+
+            // PRINT("%li, (%li) -> (%li): %lf %lf", j, i, actual->vertex, distance, lowest_distance);
 
             if (distance < lowest_distance) {
                 lowest_distance = distance;
                 lowest_idx = i;
             }
-        }
+
+            actual = actual->next;
+        } while (actual != path->first_edge);
     }
 
     return lowest_idx;
@@ -51,9 +65,12 @@ static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx) {
     size_t lowest_idx = 0;
     double lowest_distance = DBL_MAX;
 
-    for (size_t i = 0; i < (size_t)path->length - 1; ++i) {
-        Coord actual_coord = Graph_get(graph, path->vertices[i]);
-        Coord next_coord = Graph_get(graph, path->vertices[i + 1]);
+    Edge *actual = path->first_edge;
+    size_t i = 0;
+
+    do {
+        Coord actual_coord = Graph_get(graph, actual->vertex);
+        Coord next_coord = Graph_get(graph, actual->next->vertex);
 
         double total_distance =
                 Coord_distance(actual_coord, vertex_coord) +
@@ -63,10 +80,15 @@ static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx) {
             lowest_distance = total_distance;
             lowest_idx = i;
         }
-    }
 
-    Path_insert(path, lowest_idx + 1, vertex_idx);
+        i++;
+        actual = actual->next;
+    } while (actual != path->first_edge);
 
-    PRINT("%li on %li", vertex_idx, lowest_idx + 1);
+    Path_insert(path, lowest_idx + 1, vertex_idx, 0);
+
+    // if (vertex_idx % 100 == 0) {
+        PRINT("%li:\t(%li)", lowest_idx + 1, vertex_idx);
+    // }
     return lowest_idx + 1;
 }

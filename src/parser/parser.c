@@ -26,7 +26,7 @@ typedef struct {
 static void shift_str_token(char **str, char dst[MAX_TOKEN_SIZE]);
 static HeaderInfo parse_header(FILE *file);
 static void parse_graph(FILE *file, Graph *graph);
-static LineReturn interpret_line(char *str);
+static LineReturn interpret_line(char *line);
 
 static char charhigh(char c);
 static bool is_number(char c);
