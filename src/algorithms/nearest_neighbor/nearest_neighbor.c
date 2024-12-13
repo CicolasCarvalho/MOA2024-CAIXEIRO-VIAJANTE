@@ -32,7 +32,9 @@ static size_t nearest_step(Path *path, size_t source_idx) {
     double lowest_distance = DBL_MAX;
 
     for (size_t i = 0; i < (size_t)path->graph->vertices_num; ++i) {
-        if (i == source_idx || Path_has(path, i)) continue;
+        if (i == source_idx || Path_has(path, i)) {
+            continue;
+        }
 
         Coord i_coord = Graph_get(path->graph, i);
         double distance = Coord_distance(source_coord, i_coord);

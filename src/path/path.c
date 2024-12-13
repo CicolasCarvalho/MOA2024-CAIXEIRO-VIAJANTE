@@ -45,6 +45,7 @@ void Path_append(Path *path, size_t to_idx, double distance) {
 
         path->first_edge = new_edge;
 
+        Path_add_vertex_to_map(path, to_idx);
         path->length++;
         return;
     }
@@ -61,13 +62,13 @@ void Path_append(Path *path, size_t to_idx, double distance) {
 }
 
 void Path_insert(Path *path, size_t index, size_t to_idx, double distance) {
-    if (path->length == path->graph->vertices_num) {
-        RAISE("caminho já esta completo");
-    }
-
-    if (index > (size_t)path->length) {
-        RAISE("indice fora dos limites do caminho [0; %i]", path->length);
-    }
+    // if (path->length == path->graph->vertices_num) {
+    //     RAISE("caminho já esta completo");
+    // }
+    //
+    // if (index > (size_t)path->length) {
+    //     RAISE("indice fora dos limites do caminho [0; %i]", path->length);
+    // }
 
     if (index == (size_t)path->length) {
         Path_append(path, to_idx, distance);
@@ -97,19 +98,8 @@ void Path_insert(Path *path, size_t index, size_t to_idx, double distance) {
 bool Path_has(Path *path, size_t idx) {
     size_t inclusion_idx = idx / 8;
     char chunk = path->inclusion_map[inclusion_idx];
-    return chunk & (0b1 << (idx % 8));
 
-    // if (path->first_edge == NULL) return false;
-    //
-    // Edge *actual = path->first_edge;
-    //
-    // do {
-    //     if (actual->vertex == idx) return true;
-    //
-    //     actual = actual->next;
-    // } while(actual != path->first_edge);
-    //
-    // return false;
+    return chunk & (0b1 << (idx % 8));
 }
 
 void Path_print(Path *path) {
@@ -133,5 +123,19 @@ void Path_print(Path *path) {
 static void Path_add_vertex_to_map(Path *path, size_t idx) {
     size_t inclusion_idx = idx / 8;
     char *chunk = &path->inclusion_map[inclusion_idx];
-    (*chunk) |= (0b1 << (idx % 8));
+    (*chunk) |= 0b1 << (idx % 8);
+
+    PRINT(
+            "%li: [%li]: (%i%i%i%i%i%i%i%i)",
+            idx,
+            inclusion_idx,
+            ((*chunk) & 0b10000000) >> 7,
+            ((*chunk) & 0b01000000) >> 6,
+            ((*chunk) & 0b00100000) >> 5,
+            ((*chunk) & 0b00010000) >> 4,
+            ((*chunk) & 0b00001000) >> 3,
+            ((*chunk) & 0b00000100) >> 2,
+            ((*chunk) & 0b00000010) >> 1,
+            ((*chunk) & 0b00000001)
+    );
 }

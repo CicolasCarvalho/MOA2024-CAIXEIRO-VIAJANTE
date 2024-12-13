@@ -11,6 +11,7 @@ typedef struct Edge Edge;
 struct Edge {
     size_t vertex;
     double distance;
+
     Edge *next;
     Edge *previous;
 };

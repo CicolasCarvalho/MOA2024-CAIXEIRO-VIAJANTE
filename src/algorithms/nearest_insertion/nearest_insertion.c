@@ -1,60 +1,72 @@
 #include "nearest_insertion.h"
 
+//-definitions----------------------------------------------------------------------------------------------------------
+
+
 //-declarations---------------------------------------------------------------------------------------------------------
 
-static size_t get_closest_vertex(Graph *graph, Path *path);
+static size_t update_closest_vertex(Graph *graph, double *distance_cache, size_t last_idx);
 static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx);
 
 //-functions------------------------------------------------------------------------------------------------------------
 
 Path *build_nearest_insertion(Graph *graph, size_t from) {
     Path *path = Path_new(graph, from);
-    Path_append(path, from + 1, Coord_distance(
-            Graph_get(graph, from),
-            Graph_get(graph, from + 1)
-    ));
-    Path_append(path, from + 2, Coord_distance(
-        Graph_get(graph, from + 1),
-        Graph_get(graph, from + 2)
-    ));
+    size_t last_insertion = from;
+
+    double *distance_cache = malloc(sizeof(double) * graph->vertices_num);
+    for (size_t i = 0; i < (size_t)graph->vertices_num; ++i) {
+        distance_cache[i] = DBL_MAX;
+    }
+
+    update_closest_vertex(graph, distance_cache, from);
+    // preset subtour
+    for (size_t i = from + 1; i < from + 3; ++i) {
+        Path_append(path, i, Coord_distance(
+            Graph_get(graph, i - 1),
+            Graph_get(graph, i)
+        ));
+        last_insertion = update_closest_vertex(graph, distance_cache, i);
+    }
 
     while(path->length < graph->vertices_num) {
-        size_t closest_idx = get_closest_vertex(graph, path);
-        PRINT("closest: %li", closest_idx);
-        insertion_step(graph, path, closest_idx);
+        last_insertion = update_closest_vertex(graph, distance_cache, last_insertion);
+        PRINT("closest: %li", last_insertion);
+        insertion_step(graph, path, last_insertion);
         // Path_print(path);
     }
+
+    free(distance_cache);
 
     return path;
 }
 
 //-static---------------------------------------------------------------------------------------------------------------
 
-static size_t get_closest_vertex(Graph *graph, Path *path) {
-    size_t lowest_idx = 0;
+static size_t update_closest_vertex(Graph *graph, double *distance_cache, size_t last_idx) {
+    if (distance_cache == NULL) {
+        RAISE("distance cache is null");
+    }
+
+    Coord last_coord = Graph_get(graph, last_idx);
+
     double lowest_distance = DBL_MAX;
+    size_t lowest_idx = 0;
 
     for (size_t i = 0; i < (size_t)graph->vertices_num; ++i) {
-        if (Path_has(path, i)) continue;
-
         Coord i_coord = Graph_get(graph, i);
-        Edge *actual = path->first_edge;
+        double distance = Coord_distance(i_coord, last_coord);
 
-        do {
-            if (i == actual->vertex) break;
+        if (distance < distance_cache[i])
+            distance_cache[i] = distance;
 
-            Coord j_coord = Graph_get(graph, actual->vertex);
-            double distance = Coord_distance(i_coord, j_coord);
+        if (distance_cache[i] <= 0)
+            continue;
 
-            // PRINT("%li, (%li) -> (%li): %lf %lf", j, i, actual->vertex, distance, lowest_distance);
-
-            if (distance < lowest_distance) {
-                lowest_distance = distance;
-                lowest_idx = i;
-            }
-
-            actual = actual->next;
-        } while (actual != path->first_edge);
+        if (distance_cache[i] < lowest_distance) {
+            lowest_distance = distance_cache[i];
+            lowest_idx = i;
+        }
     }
 
     return lowest_idx;
@@ -62,7 +74,7 @@ static size_t get_closest_vertex(Graph *graph, Path *path) {
 
 static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx) {
     Coord vertex_coord = Graph_get(graph, vertex_idx);
-    size_t lowest_idx = 0;
+    size_t lowest_position = 0;
     double lowest_distance = DBL_MAX;
 
     Edge *actual = path->first_edge;
@@ -78,17 +90,17 @@ static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx) {
 
         if (total_distance < lowest_distance) {
             lowest_distance = total_distance;
-            lowest_idx = i;
+            lowest_position = i;
         }
 
         i++;
         actual = actual->next;
     } while (actual != path->first_edge);
 
-    Path_insert(path, lowest_idx + 1, vertex_idx, 0);
+    Path_insert(path, lowest_position + 1, vertex_idx, 0);
 
     // if (vertex_idx % 100 == 0) {
-        PRINT("%li:\t(%li)", lowest_idx + 1, vertex_idx);
+        PRINT("%li:\t(%li)", lowest_position + 1, vertex_idx);
     // }
-    return lowest_idx + 1;
+    return lowest_position + 1;
 }
