@@ -5,7 +5,7 @@
 
 //-declarations---------------------------------------------------------------------------------------------------------
 
-static size_t update_closest_vertex(Graph *graph, double *distance_cache, size_t last_idx);
+static size_t update_closest_vertex(Graph *graph, Path *path, double *distance_cache, size_t last_idx);
 static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx);
 
 //-functions------------------------------------------------------------------------------------------------------------
@@ -19,31 +19,31 @@ Path *build_nearest_insertion(Graph *graph, size_t from) {
         distance_cache[i] = DBL_MAX;
     }
 
-    update_closest_vertex(graph, distance_cache, from);
+    update_closest_vertex(graph, path, distance_cache, from);
     // preset subtour
     for (size_t i = from + 1; i < from + 3; ++i) {
         Path_append(path, i, Coord_distance(
             Graph_get(graph, i - 1),
             Graph_get(graph, i)
         ));
-        last_insertion = update_closest_vertex(graph, distance_cache, i);
+        last_insertion = update_closest_vertex(graph, path, distance_cache, i);
     }
 
     while(path->length < graph->vertices_num) {
-        last_insertion = update_closest_vertex(graph, distance_cache, last_insertion);
+        last_insertion = update_closest_vertex(graph, path, distance_cache, last_insertion);
         PRINT("closest: %li", last_insertion);
         insertion_step(graph, path, last_insertion);
-        // Path_print(path);
     }
 
     free(distance_cache);
 
+    Path_update_distance(graph, path);
     return path;
 }
 
 //-static---------------------------------------------------------------------------------------------------------------
 
-static size_t update_closest_vertex(Graph *graph, double *distance_cache, size_t last_idx) {
+static size_t update_closest_vertex(Graph *graph, Path *path, double *distance_cache, size_t last_idx) {
     if (distance_cache == NULL) {
         RAISE("distance cache is null");
     }
@@ -60,10 +60,7 @@ static size_t update_closest_vertex(Graph *graph, double *distance_cache, size_t
         if (distance < distance_cache[i])
             distance_cache[i] = distance;
 
-        if (distance_cache[i] <= 0)
-            continue;
-
-        if (distance_cache[i] < lowest_distance) {
+        if (!Path_has(path, i) && distance_cache[i] < lowest_distance) {
             lowest_distance = distance_cache[i];
             lowest_idx = i;
         }
@@ -97,7 +94,7 @@ static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx) {
         actual = actual->next;
     } while (actual != path->first_edge);
 
-    Path_insert(path, lowest_position + 1, vertex_idx, 0);
+    Path_insert(path, lowest_position + 1, vertex_idx, -1);
 
     // if (vertex_idx % 100 == 0) {
         PRINT("%li:\t(%li)", lowest_position + 1, vertex_idx);

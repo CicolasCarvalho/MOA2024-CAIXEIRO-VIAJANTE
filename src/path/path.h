@@ -17,7 +17,6 @@ struct Edge {
 };
 
 typedef struct {
-    Graph *graph;
     char *inclusion_map;
 
     int32_t length;
@@ -31,5 +30,6 @@ void Path_append(Path *path, size_t to_idx, double distance);
 void Path_insert(Path *path, size_t index, size_t to_idx, double distance);
 bool Path_has(Path *path, size_t idx);
 void Path_print(Path *path);
+double Path_update_distance(Graph *graph, Path *path);
 
 #endif //MOA2024_CAIXEIRO_VIAJANTE_PATH_H

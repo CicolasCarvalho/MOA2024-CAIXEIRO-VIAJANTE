@@ -54,8 +54,10 @@ int main(int argc, char **argv) {
 
         Path *nearest_neighbor_path = build_nearest_neighbor(graph, 0);
 
-        // OUTPUT("Edges:\n\n");
-        // Path_print(nearest_neighbor_path);
+        if (!IS_BENCHMARK) {
+            OUTPUT("Edges:\n\n");
+            Path_print(nearest_neighbor_path);
+        }
         Path_free(nearest_neighbor_path);
         OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
     }
@@ -66,8 +68,10 @@ int main(int argc, char **argv) {
 
         Path *nearest_insertion_path = build_nearest_insertion(graph, 0);
 
-        // OUTPUT("Edges:\n\n");
-        // Path_print(nearest_insertion_path);
+        if (!IS_BENCHMARK) {
+            OUTPUT("Edges:\n\n");
+            Path_print(nearest_insertion_path);
+        }
         Path_free(nearest_insertion_path);
         OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
     }
