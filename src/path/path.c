@@ -122,15 +122,48 @@ void Path_print(Path *path) {
     END_LOG("path");
 }
 
+void Path_print_reverse(Path *path) {
+    START_LOG("path:");
+    Edge *actual = path->first_edge;
+    double total_distance = 0;
+
+    do {
+        // LOG("%li: ", actual);
+        OUTPUT("(%li)\t<-\t", actual->vertex);
+
+        total_distance += actual->distance;
+        actual = actual->previous;
+    } while (actual != path->first_edge);
+
+    OUTPUT("(%li)\n\n", actual->vertex);
+    OUTPUT("Total Distance: %f\n", total_distance);
+
+    END_LOG("path");
+}
+
+double Path_get_distance(Graph *graph, Path *path) {
+    Edge *actual = path->first_edge;
+    double total_distance = 0;
+
+    do {
+        total_distance += actual->distance;
+        actual = actual->next;
+    } while (actual != path->first_edge);
+
+    return total_distance;
+}
+
 double Path_update_distance(Graph *graph, Path *path) {
     Edge *actual = path->first_edge;
     double total_distance = 0;
 
     do {
-        actual->distance = Coord_distance(
-            Graph_get(graph, actual->vertex),
-            Graph_get(graph, actual->next->vertex)
+        double new = Coord_distance(
+            Graph_get(graph, actual->previous->vertex),
+            Graph_get(graph, actual->vertex)
         );
+
+        actual->distance = new;
 
         total_distance += actual->distance;
         actual = actual->next;

@@ -1,8 +1,5 @@
 #include "nearest_insertion.h"
 
-//-definitions----------------------------------------------------------------------------------------------------------
-
-
 //-declarations---------------------------------------------------------------------------------------------------------
 
 static size_t update_closest_vertex(Graph *graph, Path *path, double *distance_cache, size_t last_idx);

@@ -2,8 +2,9 @@
 #include <string.h>
 
 #include "./parser/parser.h"
-#include "./algorithms/nearest_neighbor/nearest_neighbor.h"
-#include "./algorithms/nearest_insertion/nearest_insertion.h"
+#include "./algorithms/heuristics/nearest_neighbor/nearest_neighbor.h"
+#include "./algorithms/heuristics/nearest_insertion/nearest_insertion.h"
+#include "./algorithms/heuristics/pair-swap/pair_swap.h"
 #include "defs.h"
 
 #ifdef WIN32
@@ -58,6 +59,14 @@ int main(int argc, char **argv) {
             OUTPUT("Edges:\n\n");
             Path_print(nearest_neighbor_path);
         }
+
+        apply_pair_swap(graph, nearest_neighbor_path);
+
+        if (!IS_BENCHMARK) {
+            OUTPUT("Edges:\n\n");
+            Path_print(nearest_neighbor_path);
+        }
+
         Path_free(nearest_neighbor_path);
         OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
     }
