@@ -4,7 +4,8 @@
 #include "./parser/parser.h"
 #include "./algorithms/heuristics/nearest_neighbor/nearest_neighbor.h"
 #include "./algorithms/heuristics/nearest_insertion/nearest_insertion.h"
-#include "./algorithms/heuristics/pair-swap/pair_swap.h"
+#include "./algorithms/heuristics/pair_swap/pair_swap.h"
+#include "./algorithms/heuristics/two_opt/two_opt.h"
 #include "defs.h"
 
 #ifdef WIN32
@@ -60,7 +61,7 @@ int main(int argc, char **argv) {
             Path_print(nearest_neighbor_path);
         }
 
-        apply_pair_swap(graph, nearest_neighbor_path);
+        apply_two_opt(graph, nearest_neighbor_path);
 
         if (!IS_BENCHMARK) {
             OUTPUT("Edges:\n\n");

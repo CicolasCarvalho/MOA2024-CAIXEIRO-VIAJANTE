@@ -1,4 +1,4 @@
-NAME: test5
+NAME: test8
 TYPE: TSP
 COMMENT: 8-city test
 DIMENSION: 8

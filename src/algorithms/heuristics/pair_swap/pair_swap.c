@@ -21,7 +21,7 @@ void apply_pair_swap(Graph *graph, Path *path) {
           j_next;
 
     // double actual_distance = Path_get_distance(graph, path);
-    size_t i = 0, j;
+    size_t i = 1, j;
 
     while (i_edge != path->first_edge->previous) {
         j_edge = i_edge->next;
@@ -53,20 +53,21 @@ void apply_pair_swap(Graph *graph, Path *path) {
                 size_t tmp = i_edge->vertex;
                 i_edge->vertex = j_edge->vertex;
                 i_coord = Graph_get(graph, i_edge->vertex);
-                i_source = Graph_get(graph, i_edge->previous->vertex);
-                i_next = Graph_get(graph, i_edge->next->vertex);
-
                 j_edge->vertex = tmp;
 
-                double updated = Path_update_distance(graph, path);
-                PRINT("(%li, %li): [%li, %li]: %f -> %f (%f)", j_edge->vertex, i_edge->vertex, i, j, actual_distance, new_distance, updated);
+                j_edge = i_edge->next;
+                j = i + 2;
+
+                Path_update_distance(graph, path);
+                PRINT("(%li, %li): [%li, %li]: %f -> %f", j_edge->vertex, i_edge->vertex, i, j, actual_distance, new_distance);
+            } else {
+                j_edge = j_edge->next;
+                j++;
             }
 
-            j_edge = j_edge->next;
             j_coord = Graph_get(graph, j_edge->vertex);
             j_source = Graph_get(graph, j_edge->previous->vertex);
             j_next = Graph_get(graph, j_edge->next->vertex);
-            j++;
         }
 
         i_edge = i_edge->next;
