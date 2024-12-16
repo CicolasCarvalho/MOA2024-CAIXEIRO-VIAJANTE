@@ -8,7 +8,7 @@ static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx);
 //-functions------------------------------------------------------------------------------------------------------------
 
 Path *build_nearest_insertion(Graph *graph, size_t from) {
-    Path *path = Path_new(graph, from);
+    Path *path = Path_new(from);
     size_t last_insertion = from;
 
     double *distance_cache = malloc(sizeof(double) * graph->vertices_num);
@@ -19,10 +19,7 @@ Path *build_nearest_insertion(Graph *graph, size_t from) {
     update_closest_vertex(graph, path, distance_cache, from);
     // preset subtour
     for (size_t i = from + 1; i < from + 3; ++i) {
-        Path_append(path, i, Coord_distance(
-            Graph_get(graph, i - 1),
-            Graph_get(graph, i)
-        ));
+        Path_append(path, i);
         last_insertion = update_closest_vertex(graph, path, distance_cache, i);
     }
 
@@ -34,7 +31,7 @@ Path *build_nearest_insertion(Graph *graph, size_t from) {
 
     free(distance_cache);
 
-    Path_update_distance(graph, path);
+    // Path_update_distance(graph, path);
     return path;
 }
 
@@ -91,7 +88,7 @@ static size_t insertion_step(Graph *graph, Path *path, size_t vertex_idx) {
         actual = actual->next;
     } while (actual != path->first_edge);
 
-    Path_insert(path, lowest_position + 1, vertex_idx, -1);
+    Path_insert(path, lowest_position + 1, vertex_idx);
 
     // if (vertex_idx % 100 == 0) {
         PRINT("%li:\t(%li)", lowest_position + 1, vertex_idx);

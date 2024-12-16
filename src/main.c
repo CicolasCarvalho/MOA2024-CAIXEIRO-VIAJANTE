@@ -44,7 +44,6 @@ int main(int argc, char **argv) {
     }
 
     char *flag = shift_arg(&argc, &argv);
-
     char *path = shift_arg(&argc, &argv);
 
     Graph *graph = graph_from_tsp(path);
@@ -55,17 +54,21 @@ int main(int argc, char **argv) {
         OUTPUT("\nNearest Neighbor:\n---#---------#---\n");
 
         Path *nearest_neighbor_path = build_nearest_neighbor(graph, 0);
+        double distance = Graph_run_path(graph, nearest_neighbor_path);
 
         if (!IS_BENCHMARK) {
             OUTPUT("Edges:\n\n");
             Path_print(nearest_neighbor_path);
+            OUTPUT("Total Distance: %f\n", distance);
         }
 
         apply_two_opt(graph, nearest_neighbor_path);
+        distance = Graph_run_path(graph, nearest_neighbor_path);
 
         if (!IS_BENCHMARK) {
             OUTPUT("Edges:\n\n");
             Path_print(nearest_neighbor_path);
+            OUTPUT("Total Distance: %f\n", distance);
         }
 
         Path_free(nearest_neighbor_path);
@@ -77,10 +80,12 @@ int main(int argc, char **argv) {
         OUTPUT("\nNearest Insertion:\n---#----------#---\n");
 
         Path *nearest_insertion_path = build_nearest_insertion(graph, 0);
+        double distance = Graph_run_path(graph, nearest_insertion_path);
 
         if (!IS_BENCHMARK) {
             OUTPUT("Edges:\n\n");
             Path_print(nearest_insertion_path);
+            OUTPUT("Total Distance: %f\n", distance);
         }
         Path_free(nearest_insertion_path);
         OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);

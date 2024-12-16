@@ -2,15 +2,15 @@
 
 //-declarations---------------------------------------------------------------------------------------------------------
 
+static void reverse_edges(Edge *from, Edge *to);
+
 //-functions------------------------------------------------------------------------------------------------------------
 
 void apply_two_opt(Graph *graph, Path *path) {
     START_LOG("two_opt");
 
     Edge *i_edge = path->first_edge->next,
-         *j_edge,
-         *k_edge,
-         *l_edge;
+         *j_edge;
 
     Coord i_coord = Graph_get(graph, i_edge->vertex),
           j_coord;
@@ -18,7 +18,6 @@ void apply_two_opt(Graph *graph, Path *path) {
     Coord i_source = Graph_get(graph, i_edge->previous->vertex),
           j_source;
 
-    // double actual_distance = Path_get_distance(graph, path);
     size_t i = 1, j;
 
     while (i_edge != path->first_edge->previous->previous) {
@@ -37,25 +36,15 @@ void apply_two_opt(Graph *graph, Path *path) {
                     Coord_distance(i_coord, j_coord)    ; // (3 -> 0) // j_edge
 
             if (new_distance < actual_distance) {
-                // inverter a ordem das arestas
-                k_edge = j_edge->previous;
-                l_edge = i_edge;
-                while (k_edge != l_edge) {
-                    size_t tmp_vertex = k_edge->vertex;
-                    k_edge->vertex = l_edge->vertex;
-                    l_edge->vertex = tmp_vertex;
+                PRINT("(%li, %li): [%li, %li]: %f\t-> %f", i_edge->vertex, j_edge->vertex, i, j, actual_distance, new_distance);
 
-                    k_edge = k_edge->previous;
-                    if (k_edge != l_edge) l_edge = l_edge->next;
-                }
+                reverse_edges(i_edge, j_edge->previous);
 
                 i_coord = Graph_get(graph, i_edge->vertex);
 
+
                 j_edge = i_edge->next->next;
                 j = i + 2;
-
-                Path_update_distance(graph, path);
-                PRINT("(%li, %li): [%li, %li]: %f   -> %f", i_edge->vertex, j_edge->vertex, i, j, actual_distance, new_distance);
             } else {
                 j_edge = j_edge->next;
                 j++;
@@ -75,3 +64,17 @@ void apply_two_opt(Graph *graph, Path *path) {
 }
 
 //-static---------------------------------------------------------------------------------------------------------------
+
+static void reverse_edges(Edge *from, Edge *to) {
+    // inverter a ordem das arestas
+    Edge *k_edge = from;
+    Edge *l_edge = to;
+    while (k_edge != l_edge) {
+        size_t tmp_vertex = k_edge->vertex;
+        k_edge->vertex = l_edge->vertex;
+        l_edge->vertex = tmp_vertex;
+
+        l_edge = l_edge->previous;
+        if (k_edge != l_edge) k_edge = k_edge->next;
+    }
+}

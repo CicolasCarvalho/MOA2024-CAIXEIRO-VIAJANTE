@@ -1,11 +1,5 @@
 #include "pair_swap.h"
 
-//-declarations---------------------------------------------------------------------------------------------------------
-
-// static void pair_swap(Path *path, size_t i, size_t j);
-
-//-functions------------------------------------------------------------------------------------------------------------
-
 void apply_pair_swap(Graph *graph, Path *path) {
     START_LOG("pair_swap");
 
@@ -20,7 +14,6 @@ void apply_pair_swap(Graph *graph, Path *path) {
           i_next = Graph_get(graph, i_edge->next->vertex),
           j_next;
 
-    // double actual_distance = Path_get_distance(graph, path);
     size_t i = 1, j;
 
     while (i_edge != path->first_edge->previous) {
@@ -32,10 +25,10 @@ void apply_pair_swap(Graph *graph, Path *path) {
         j = i + 1;
         while (j_edge != path->first_edge) {
             double actual_distance =
-                    i_edge->distance        + // (0 -> 1)
-                    i_edge->next->distance  + // (1 -> 2)
-                    j_edge->distance        + // (3 -> 4)
-                    j_edge->next->distance  ; // (4 -> 5)
+                    Coord_distance(i_source, i_coord)   + // (0 -> 1)
+                    Coord_distance(i_coord, i_next)     + // (1 -> 2)
+                    Coord_distance(j_source, j_coord)   + // (0 -> 1)
+                    Coord_distance(j_coord, j_next)     ; // (1 -> 2)
 
             double new_distance =
                     Coord_distance(i_source, j_coord)   + // (0 -> 4) // i_edge
@@ -44,22 +37,21 @@ void apply_pair_swap(Graph *graph, Path *path) {
                     Coord_distance(i_coord, j_next)     ; // (1 -> 5) // j_next
 
             if (j == i + 1) {
-                actual_distance -= j_edge->distance;
-
-                new_distance += j_edge->distance;
+                actual_distance -= Coord_distance(j_source, j_coord);
+                new_distance += Coord_distance(j_source, j_coord);
             }
 
             if (new_distance < actual_distance) {
+                PRINT("(%li, %li): [%li, %li]: %f\t-> %f", i_edge->vertex, j_edge->vertex, i, j, actual_distance, new_distance);
+
                 size_t tmp = i_edge->vertex;
                 i_edge->vertex = j_edge->vertex;
-                i_coord = Graph_get(graph, i_edge->vertex);
                 j_edge->vertex = tmp;
+
+                i_coord = Graph_get(graph, i_edge->vertex);
 
                 j_edge = i_edge->next;
                 j = i + 2;
-
-                Path_update_distance(graph, path);
-                PRINT("(%li, %li): [%li, %li]: %f -> %f", j_edge->vertex, i_edge->vertex, i, j, actual_distance, new_distance);
             } else {
                 j_edge = j_edge->next;
                 j++;
@@ -77,13 +69,5 @@ void apply_pair_swap(Graph *graph, Path *path) {
         i++;
     }
 
-    Path_update_distance(graph, path);
-
     END_LOG("pair_swap");
 }
-
-//-static---------------------------------------------------------------------------------------------------------------
-
-// static void pair_swap(Path *path, size_t i, size_t j) {
-//
-// }
