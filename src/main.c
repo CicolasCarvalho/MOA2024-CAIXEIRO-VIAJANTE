@@ -38,59 +38,84 @@ char *shift_arg(int *argc, char ***argv);
 int main(int argc, char **argv) {
     shift_arg(&argc, &argv);
 
-    if (argc <= 1) {
-        LOG("Esperado um argumento contendo o arquivo de entrada\n./main [--nearest_neighbor|--nearest_insertion] <caminho>\n");
+    if (argc <= 2) {
+        LOG("Esperado um argumento contendo o arquivo de entrada\n./main [--nearest_neighbor|--nearest_insertion] [--pair_swap|--2opt|--none] <caminho>\n");
         return 0;
     }
 
-    char *flag = shift_arg(&argc, &argv);
-    char *path = shift_arg(&argc, &argv);
+    char *build_flag = shift_arg(&argc, &argv);
+    char *opt_flag = shift_arg(&argc, &argv);
+    char *file_path = shift_arg(&argc, &argv);
 
-    Graph *graph = graph_from_tsp(path);
+    Graph *graph = graph_from_tsp(file_path);
+    Path *path = NULL;
     OUTPUT("\n---#----Graph Size: (%i)----#---\n", graph->vertices_num);
 
-    if (strcmp(flag, "--nearest_neighbor") == 0 || IS_BENCHMARK) {
+    if (strcmp(build_flag, "--nearest_neighbor") == 0) {
         double before = get_time();
         OUTPUT("\nNearest Neighbor:\n---#---------#---\n");
 
-        Path *nearest_neighbor_path = build_nearest_neighbor(graph, 0);
-        double distance = Graph_run_path(graph, nearest_neighbor_path);
+        path = build_nearest_neighbor(graph, 0);
+        double distance = Graph_run_path(graph, path);
 
         if (!IS_BENCHMARK) {
             OUTPUT("Edges:\n\n");
-            Path_print(nearest_neighbor_path);
-            OUTPUT("Total Distance: %f\n", distance);
+            Path_print(path);
         }
 
-        apply_two_opt(graph, nearest_neighbor_path);
-        distance = Graph_run_path(graph, nearest_neighbor_path);
-
-        if (!IS_BENCHMARK) {
-            OUTPUT("Edges:\n\n");
-            Path_print(nearest_neighbor_path);
-            OUTPUT("Total Distance: %f\n", distance);
-        }
-
-        Path_free(nearest_neighbor_path);
+        OUTPUT("Total Distance: %f\n", distance);
         OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
     }
 
-    if (strcmp(flag, "--nearest_insertion") == 0 || IS_BENCHMARK) {
+    if (strcmp(build_flag, "--nearest_insertion") == 0) {
         double before = get_time();
         OUTPUT("\nNearest Insertion:\n---#----------#---\n");
 
-        Path *nearest_insertion_path = build_nearest_insertion(graph, 0);
-        double distance = Graph_run_path(graph, nearest_insertion_path);
+        path = build_nearest_insertion(graph, 0);
+        double distance = Graph_run_path(graph, path);
 
         if (!IS_BENCHMARK) {
             OUTPUT("Edges:\n\n");
-            Path_print(nearest_insertion_path);
-            OUTPUT("Total Distance: %f\n", distance);
+            Path_print(path);
         }
-        Path_free(nearest_insertion_path);
+
+        OUTPUT("Total Distance: %f\n", distance);
         OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
     }
 
+    if (strcmp(opt_flag, "--pair_swap") == 0) {
+        double before = get_time();
+        OUTPUT("\nPair Swap:\n----------\n");
+
+        apply_pair_swap(graph, path);
+        double distance = Graph_run_path(graph, path);
+
+        if (!IS_BENCHMARK) {
+            OUTPUT("Edges:\n\n");
+            Path_print(path);
+        }
+
+        OUTPUT("Total Distance: %f\n", distance);
+        OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
+    }
+
+    if (strcmp(opt_flag, "--2opt") == 0) {
+        double before = get_time();
+        OUTPUT("\n2opt:\n-----\n");
+
+        apply_two_opt(graph, path);
+        double distance = Graph_run_path(graph, path);
+
+        if (!IS_BENCHMARK) {
+            OUTPUT("Edges:\n\n");
+            Path_print(path);
+        }
+
+        OUTPUT("Total Distance: %f\n", distance);
+        OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
+    }
+
+    if (path != NULL) Path_free(path);
     Graph_free(graph);
     return 0;
 }

@@ -106,6 +106,8 @@ void Path_insert(Path *path, size_t index, size_t to_idx) {
 
 bool Path_has(Path *path, size_t idx) {
     size_t inclusion_idx = idx / 8;
+
+    if (inclusion_idx >= (size_t)path->inclusion_map.capacity) return false;
     char chunk = path->inclusion_map.map[inclusion_idx];
 
     return chunk & (0b1 << (idx % 8));
