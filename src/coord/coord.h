@@ -5,8 +5,8 @@
 #include <math.h>
 
 typedef struct {
-    int32_t x;
-    int32_t y;
+    double x;
+    double y;
 } Coord;
 
 double Coord_distance(Coord from, Coord to);

@@ -1,3 +1,10 @@
+// Nícolas dos Santos Carvalho - RA128660
+// João Pedro Zen Sirino - RA124360
+// Maringá, PR - Brasil
+// 18/12/2024
+// Resolução PCV com Métodos Heurísticos
+// https://github.com/CicolasCarvalho/MOA2024-CAIXEIRO-VIAJANTE
+
 #include <stdio.h>
 #include <string.h>
 
@@ -39,7 +46,7 @@ int main(int argc, char **argv) {
     shift_arg(&argc, &argv);
 
     if (argc <= 2) {
-        LOG("Esperado um argumento contendo o arquivo de entrada\n./main [--nearest_neighbor|--nearest_insertion] [--pair_swap|--2opt|--none] <caminho>\n");
+        OUTPUT("Esperado um argumento contendo o arquivo de entrada\n./main [--nearest_neighbor|--nearest_insertion] [--pair_swap|--2opt|--none] <caminho>\n");
         return 0;
     }
 

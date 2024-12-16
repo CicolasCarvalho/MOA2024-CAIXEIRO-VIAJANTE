@@ -50,8 +50,8 @@ void apply_pair_swap(Graph *graph, Path *path) {
 
                 i_coord = Graph_get(graph, i_edge->vertex);
 
-                j_edge = i_edge->next->next;
-                j = i + 2;
+                j_edge = i_edge->next;
+                j = i + 1;
             } else {
                 j_edge = j_edge->next;
                 j++;

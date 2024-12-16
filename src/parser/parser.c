@@ -17,8 +17,8 @@ typedef struct {
 typedef struct {
     bool body_end;
     int32_t i;
-    int32_t x;
-    int32_t y;
+    double x;
+    double y;
 } GraphLine;
 
 //-declarations---------------------------------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ static void parse_graph(FILE *file, Graph *graph) {
                 if (graph_line->body_end) {
                     body_end = true;
                 } else if (graph_line->i > 0) {
-                    PRINT("%i: {x = %i, y = %i}\n", graph_line->i - 1, graph_line->x, graph_line->y);
+                    PRINT("%i: {x = %f, y = %f}\n", graph_line->i - 1, graph_line->x, graph_line->y);
                     Graph_set(graph, graph_line->i - 1, (Coord){
                         .x = graph_line->x,
                         .y = graph_line->y
@@ -197,10 +197,10 @@ static LineReturn interpret_line(char *line) {
         int32_t i = atoi(token_buffer);
 
         shift_str_token(&line, token_buffer); // x
-        int32_t x = atoi(token_buffer);
+        double x = atof(token_buffer);
 
         shift_str_token(&line, token_buffer); // y
-        int32_t y = atoi(token_buffer);
+        double y = atof(token_buffer);
 
         graph_line->i = i;
         graph_line->x = x;
