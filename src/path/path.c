@@ -96,7 +96,6 @@ void Path_insert(Path *path, size_t index, size_t to_idx) {
 
     actual->previous->next = new_edge;
     actual->previous = new_edge;
-    // *actual = new_edge;
 
     if (index == 0) path->first_edge = new_edge;
 

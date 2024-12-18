@@ -47,22 +47,3 @@ double Graph_run_path(Graph *graph, Path *path) {
 
     return total_distance;
 }
-
-// double Path_update_distance(Graph *graph, Path *path) {
-//     Edge *actual = path->first_edge;
-//     double total_distance = 0;
-//
-//     do {
-//         double new = Coord_distance(
-//             Graph_get(graph, actual->previous->vertex),
-//             Graph_get(graph, actual->vertex)
-//         );
-//
-//         actual->distance = new;
-//
-//         total_distance += actual->distance;
-//         actual = actual->next;
-//     } while (actual != path->first_edge);
-//
-//     return total_distance;
-// }

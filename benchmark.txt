@@ -1,0 +1,193 @@
+---#----Graph Size: (574)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 46881.866537
+Tempo decorrido: 0.008116s
+
+Pair Swap:
+----------
+Total Distance: 46062.695228
+Tempo decorrido: 0.013044s
+
+---#----Graph Size: (1002)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 315596.587394
+Tempo decorrido: 0.016904s
+
+Pair Swap:
+----------
+Total Distance: 307290.864495
+Tempo decorrido: 0.038149s
+
+---#----Graph Size: (1173)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 70277.941495
+Tempo decorrido: 0.020410s
+
+Pair Swap:
+----------
+Total Distance: 68324.737504
+Tempo decorrido: 0.050466s
+
+---#----Graph Size: (14051)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 577037.162832
+Tempo decorrido: 2.998327s
+
+Pair Swap:
+----------
+Total Distance: 563646.183368
+Tempo decorrido: 7.073514s
+
+---#----Graph Size: (4461)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 227156.607467
+Tempo decorrido: 0.304714s
+
+Pair Swap:
+----------
+Total Distance: 220624.467314
+Tempo decorrido: 0.729079s
+
+---#----Graph Size: (15112)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 1948433.334001
+Tempo decorrido: 3.650768s
+
+Pair Swap:
+----------
+Total Distance: 1904630.776602
+Tempo decorrido: 8.474021s
+
+---#----Graph Size: (33810)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 77327460.487491
+Tempo decorrido: 16.045826s
+
+Pair Swap:
+----------
+Total Distance: 76270337.686002
+Tempo decorrido: 41.308268s
+
+---#----Graph Size: (85900)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 163504086.394007
+Tempo decorrido: 106.851243s
+
+Pair Swap:
+----------
+Total Distance: 161109852.891856
+Tempo decorrido: 275.933997s
+
+---#----Graph Size: (574)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 46881.866537
+
+Tempo decorrido: 0.002779s
+
+2opt:
+-----
+Total Distance: 39816.696596
+
+Tempo decorrido: 0.004035s
+
+---#----Graph Size: (1002)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 315596.587394
+
+Tempo decorrido: 0.002974s
+
+2opt:
+-----
+Total Distance: 284004.506390
+
+Tempo decorrido: 0.004574s
+
+---#----Graph Size: (1173)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 70277.941495
+
+Tempo decorrido: 0.011368s
+
+2opt:
+-----
+Total Distance: 63989.321611
+
+Tempo decorrido: 0.008904s
+
+---#----Graph Size: (14051)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 577037.162832
+
+Tempo decorrido: 0.717798s
+
+2opt:
+-----
+Total Distance: 517289.861995
+
+Tempo decorrido: 0.700407s
+
+---#----Graph Size: (4461)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 227156.607467
+
+Tempo decorrido: 0.064004s
+
+2opt:
+-----
+Total Distance: 201979.370251
+
+Tempo decorrido: 0.073490s
+
+---#----Graph Size: (15112)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 1948433.334001
+
+Tempo decorrido: 0.897107s
+
+2opt:
+-----
+Total Distance: 1734343.938267
+
+Tempo decorrido: 0.832070s
+
+---#----Graph Size: (33810)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 77327460.487491
+
+Tempo decorrido: 2.567535s
+
+2opt:
+-----
+Total Distance: 71638376.990404
+
+Tempo decorrido: 4.011566s
