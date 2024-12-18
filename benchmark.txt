@@ -191,3 +191,241 @@ Tempo decorrido: 2.567535s
 Total Distance: 71638376.990404
 
 Tempo decorrido: 4.011566s
+
+---#----Graph Size: (85900)----#---
+
+Nearest Neighbor:
+---#---------#---
+Total Distance: 163504086.394007
+
+Tempo decorrido: 18.250244s
+
+2opt:
+-----
+Total Distance: 152407431.922386
+
+Tempo decorrido: 29.268083s
+
+---#----Graph Size: (574)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 53401.986339
+
+Tempo decorrido: 0.007248s
+
+Pair Swap:
+----------
+Total Distance: 48997.701032
+
+Tempo decorrido: 0.006900s
+
+---#----Graph Size: (1002)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 367232.665567
+
+Tempo decorrido: 0.017543s
+
+Pair Swap:
+----------
+Total Distance: 336260.700581
+
+Tempo decorrido: 0.007664s
+
+---#----Graph Size: (1173)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 86233.745621
+
+Tempo decorrido: 0.020709s
+
+Pair Swap:
+----------
+Total Distance: 80051.351136
+
+Tempo decorrido: 0.009688s
+
+---#----Graph Size: (14051)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 671739.685065
+
+Tempo decorrido: 1.485341s
+
+Pair Swap:
+----------
+Total Distance: 612626.726877
+
+Tempo decorrido: 1.244219s
+
+---#----Graph Size: (4461)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 261198.528293
+
+Tempo decorrido: 0.160586s
+
+Pair Swap:
+----------
+Total Distance: 238792.406696
+
+Tempo decorrido: 0.127512s
+
+---#----Graph Size: (15112)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 2256777.723511
+
+Tempo decorrido: 1.977925s
+
+Pair Swap:
+----------
+Total Distance: 2061916.222154
+
+Tempo decorrido: 1.522704s
+
+---#----Graph Size: (33810)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 92592689.923380
+
+Tempo decorrido: 7.258529s
+
+Pair Swap:
+----------
+Total Distance: 87590800.062672
+
+Tempo decorrido: 7.516376s
+
+---#----Graph Size: (85900)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 193898515.302485
+
+Tempo decorrido: 53.087091s
+
+Pair Swap:
+----------
+Total Distance: 183552363.348610
+
+Tempo decorrido: 52.447312s
+
+---#----Graph Size: (574)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 53401.986339
+
+Tempo decorrido: 0.007081s
+
+2opt:
+-----
+Total Distance: 42790.337055
+
+Tempo decorrido: 0.004028s
+
+---#----Graph Size: (1002)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 367232.665567
+
+Tempo decorrido: 0.017942s
+
+2opt:
+-----
+Total Distance: 303176.020537
+
+Tempo decorrido: 0.005119s
+
+---#----Graph Size: (1173)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 86233.745621
+
+Tempo decorrido: 0.021677s
+
+2opt:
+-----
+Total Distance: 68266.697880
+
+Tempo decorrido: 0.005975s
+
+---#----Graph Size: (14051)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 671739.685065
+
+Tempo decorrido: 1.540034s
+
+2opt:
+-----
+Total Distance: 554214.489524
+
+Tempo decorrido: 0.862740s
+
+---#----Graph Size: (4461)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 261198.528293
+
+Tempo decorrido: 0.171179s
+
+2opt:
+-----
+Total Distance: 214988.577493
+
+Tempo decorrido: 0.072997s
+
+---#----Graph Size: (15112)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 2256777.723511
+
+Tempo decorrido: 1.871052s
+
+2opt:
+-----
+Total Distance: 1851954.788614
+
+Tempo decorrido: 0.895925s
+
+---#----Graph Size: (33810)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 92592689.923380
+
+Tempo decorrido: 7.166583s
+
+2opt:
+-----
+Total Distance: 74791582.023173
+
+Tempo decorrido: 4.184553s
+
+---#----Graph Size: (85900)----#---
+
+Nearest Insertion:
+---#----------#---
+Total Distance: 193898515.302485
+
+Tempo decorrido: 53.171444s
+
+2opt:
+-----
+Total Distance: 162894235.727705
+
+Tempo decorrido: 28.835933s
