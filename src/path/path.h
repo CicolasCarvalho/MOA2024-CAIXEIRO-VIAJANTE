@@ -39,4 +39,8 @@ bool Path_has(Path *path, size_t idx);
 void Path_print(Path *path);
 void Path_print_reverse(Path *path);
 
+InclusionMap InclusionMap_new(void);
+void InclusionMap_set(InclusionMap *inclusion_map, size_t idx);
+bool InclusionMap_has(InclusionMap inclusion_map, size_t idx);
+
 #endif //MOA2024_CAIXEIRO_VIAJANTE_PATH_H

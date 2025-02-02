@@ -6,13 +6,13 @@ SRC_DIR := src
 BUILD_DIR := build
 
 # Source files
-SRC := ./src/main.c ./src/**/*.c ./src/algorithms/heuristics/**/*.c
+SRC := ./src/main.c ./src/**/*.c ./src/algorithms/heuristics/**/*.c ./src/algorithms/metaheuristics/**/*.c
 
 # Object files
 OBJ := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC))
 
 # Compiler flags
-CFLAGS := -Wall -Wextra -O3 # -lubsan -fsanitize=undefined -fsanitize=address -Wno-unused-parameter
+CFLAGS := -Wall -Wextra -Wno-unknown-pragmas -O3 -fopenmp -lubsan -fsanitize=undefined -fsanitize=address -Wno-unused-parameter
 
 # Build target
 TARGET := $(BUILD_DIR)/out

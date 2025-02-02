@@ -2,7 +2,7 @@
 // João Pedro Zen Sirino - RA124360
 // Maringá, PR - Brasil
 // 18/12/2024
-// Resolução PCV com Métodos Heurísticos
+// Resolução PCV com Métodos Heurísticos e Meta-Heurísticos
 // https://github.com/CicolasCarvalho/MOA2024-CAIXEIRO-VIAJANTE
 
 #include <stdio.h>
@@ -13,36 +13,21 @@
 #include "./algorithms/heuristics/nearest_insertion/nearest_insertion.h"
 #include "./algorithms/heuristics/pair_swap/pair_swap.h"
 #include "./algorithms/heuristics/two_opt/two_opt.h"
+#include "./algorithms/metaheuristics/genetic_algorithm/genetic_algorithm.h"
+#include "./utils/utils.h"
 #include "defs.h"
-
-#ifdef WIN32
-
-#include <windows.h>
-double get_time()
-{
-    LARGE_INTEGER t, f;
-    QueryPerformanceCounter(&t);
-    QueryPerformanceFrequency(&f);
-    return (double)t.QuadPart/(double)f.QuadPart;
-}
-
-#else
-
-#include <sys/time.h>
-#include <sys/resource.h>
-
-double get_time()
-{
-    struct timeval t;
-    gettimeofday(&t, NULL);
-    return (double)t.tv_sec + (double)t.tv_usec*1e-6;
-}
-
-#endif
 
 char *shift_arg(int *argc, char ***argv);
 
 int main(int argc, char **argv) {
+    omp_set_num_threads(8);
+
+#pragma omp parallel
+    {
+        int32_t seed = (int32_t) get_time() + omp_get_thread_num() * 100;  // Garante uma semente única por thread
+        srand(seed);
+    }
+
     shift_arg(&argc, &argv);
 
     if (argc <= 2) {
@@ -89,6 +74,39 @@ int main(int argc, char **argv) {
         OUTPUT("Total Distance: %f\n", distance);
         OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
     }
+
+    if (strcmp(build_flag, "--genetic_PMX") == 0) {
+        double before = get_time();
+        OUTPUT("\nGenetic Algorithm (PMX):\n---#----------#---\n");
+
+        path = build_genetic_algorithm(graph, 0, PMX_CROSSOVER, GEN_SIZE, GEN_MAX_TIME);
+        double distance = Graph_run_path(graph, path);
+
+        if (!IS_BENCHMARK) {
+            // OUTPUT("Edges:\n\n");
+            // Path_print(path);
+        }
+
+        OUTPUT("Total Distance: %f\n", distance);
+        OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
+    }
+
+    if (strcmp(build_flag, "--genetic_OX1") == 0) {
+        double before = get_time();
+        OUTPUT("\nGenetic Algorithm (OX1):\n---#----------#---\n");
+
+        path = build_genetic_algorithm(graph, 0, OX1_CROSSOVER, GEN_SIZE, GEN_MAX_TIME);
+        double distance = Graph_run_path(graph, path);
+
+        if (!IS_BENCHMARK) {
+            // OUTPUT("Edges:\n\n");
+            // Path_print(path);
+        }
+
+        OUTPUT("Total Distance: %f\n", distance);
+        OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
+    }
+
 
     if (strcmp(opt_flag, "--pair_swap") == 0) {
         double before = get_time();

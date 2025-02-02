@@ -7,7 +7,7 @@ static void reverse_edges(Edge *from, Edge *to);
 //-functions------------------------------------------------------------------------------------------------------------
 
 void apply_two_opt(Graph *graph, Path *path) {
-    START_LOG("two_opt");
+    // START_LOG("two_opt");
 
     Edge *i_edge = path->first_edge->next,
          *j_edge;
@@ -36,7 +36,7 @@ void apply_two_opt(Graph *graph, Path *path) {
                     Coord_distance(i_coord, j_coord)    ; // (3 -> 0) // j_edge
 
             if (new_distance < actual_distance) {
-                PRINT("(%li, %li): [%li, %li]: %f\t-> %f", i_edge->vertex, j_edge->vertex, i, j, actual_distance, new_distance);
+                // PRINT("(%li, %li): [%li, %li]: %f\t-> %f", i_edge->vertex, j_edge->vertex, i, j, actual_distance, new_distance);
 
                 reverse_edges(i_edge, j_edge->previous);
 
@@ -60,7 +60,7 @@ void apply_two_opt(Graph *graph, Path *path) {
         i++;
     }
 
-    END_LOG("two_opt");
+    // END_LOG("two_opt");
 }
 
 //-static---------------------------------------------------------------------------------------------------------------

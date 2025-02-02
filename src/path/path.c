@@ -12,17 +12,6 @@ static Edge *Edge_new(size_t vertex) {
     return edge;
 }
 
-static InclusionMap InclusionMap_new(void) {
-    InclusionMap inclusion_map;
-
-    inclusion_map.map = calloc(INCLUSION_MAP_CHUNK, sizeof(char));
-    inclusion_map.capacity = INCLUSION_MAP_CHUNK;
-
-    return inclusion_map;
-}
-
-static void InclusionMap_set(InclusionMap *inclusion_map, size_t idx);
-
 //-functions------------------------------------------------------------------------------------------------------------
 
 Path *Path_new(size_t starting_point) {
@@ -104,12 +93,7 @@ void Path_insert(Path *path, size_t index, size_t to_idx) {
 }
 
 bool Path_has(Path *path, size_t idx) {
-    size_t inclusion_idx = idx / 8;
-
-    if (inclusion_idx >= (size_t)path->inclusion_map.capacity) return false;
-    char chunk = path->inclusion_map.map[inclusion_idx];
-
-    return chunk & (0b1 << (idx % 8));
+    return InclusionMap_has(path->inclusion_map, idx);
 }
 
 void Path_print(Path *path) {
@@ -144,13 +128,20 @@ void Path_print_reverse(Path *path) {
     END_LOG("path");
 }
 
-//-static---------------------------------------------------------------------------------------------------------------
+InclusionMap InclusionMap_new(void) {
+    InclusionMap inclusion_map;
 
-static void InclusionMap_set(InclusionMap *inclusion_map, size_t idx) {
+    inclusion_map.map = calloc(INCLUSION_MAP_CHUNK, sizeof(char));
+    inclusion_map.capacity = INCLUSION_MAP_CHUNK;
+
+    return inclusion_map;
+}
+
+void InclusionMap_set(InclusionMap *inclusion_map, size_t idx) {
     size_t inclusion_idx = idx / 8;
 
     while (inclusion_idx >= (size_t)inclusion_map->capacity) {
-        PRINT("realloc inclusion map: %i -> %i", inclusion_map->capacity, inclusion_map->capacity * 2);
+        // PRINT("realloc inclusion map: %i -> %i", inclusion_map->capacity, inclusion_map->capacity * 2);
         void *tmp = realloc(inclusion_map->map, sizeof(char) * inclusion_map->capacity * 2);
         inclusion_map->map = tmp;
         for (size_t i = inclusion_map->capacity; i < (size_t)inclusion_map->capacity * 2; ++i) {
@@ -162,17 +153,26 @@ static void InclusionMap_set(InclusionMap *inclusion_map, size_t idx) {
     char *chunk = &(inclusion_map->map[inclusion_idx]);
     (*chunk) |= 0b1 << (idx % 8); // NOLINT(*-narrowing-conversions)
 
-    PRINT(
-        "%li: [%li]: (%i%i%i%i%i%i%i%i)",
-        idx,
-        inclusion_idx,
-        ((*chunk) & 0b10000000) >> 7,
-        ((*chunk) & 0b01000000) >> 6,
-        ((*chunk) & 0b00100000) >> 5,
-        ((*chunk) & 0b00010000) >> 4,
-        ((*chunk) & 0b00001000) >> 3,
-        ((*chunk) & 0b00000100) >> 2,
-        ((*chunk) & 0b00000010) >> 1,
-        ((*chunk) & 0b00000001)
-    );
+    // PRINT(
+    //     "%li: [%li]: (%i%i%i%i%i%i%i%i)",
+    //     idx,
+    //     inclusion_idx,
+    //     ((*chunk) & 0b10000000) >> 7,
+    //     ((*chunk) & 0b01000000) >> 6,
+    //     ((*chunk) & 0b00100000) >> 5,
+    //     ((*chunk) & 0b00010000) >> 4,
+    //     ((*chunk) & 0b00001000) >> 3,
+    //     ((*chunk) & 0b00000100) >> 2,
+    //     ((*chunk) & 0b00000010) >> 1,
+    //     ((*chunk) & 0b00000001)
+    // );
+}
+
+bool InclusionMap_has(InclusionMap inclusion_map, size_t idx) {
+    size_t inclusion_idx = idx / 8;
+
+    if (inclusion_idx >= (size_t)inclusion_map.capacity) return false;
+    char chunk = inclusion_map.map[inclusion_idx];
+
+    return chunk & (0b1 << (idx % 8));
 }
