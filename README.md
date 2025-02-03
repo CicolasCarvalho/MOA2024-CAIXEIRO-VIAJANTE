@@ -1,5 +1,9 @@
 ### Caixeiro Viajante com Algoritmos Heurísticos
 
+analises de dados:
+https://docs.google.com/spreadsheets/d/1uNeRed3rUFXcJDx3tkvcuFqQe6Ef3JCYaPZpodyrSOc/edit?usp=sharing
+https://docs.google.com/spreadsheets/d/1xTFg_zdOMiRkKhCgjkVeopu4B62PplPZ3cUGDd-Ux8g/edit?usp=sharing
+
 ---
 
 #### **Descrição**
