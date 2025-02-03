@@ -17,6 +17,7 @@
 typedef enum {
     PMX_CROSSOVER,
     OX1_CROSSOVER,
+    OX2_CROSSOVER,
 } CrossoverAlgorithm;
 
 typedef enum {

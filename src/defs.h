@@ -7,7 +7,7 @@
 
 //-debug-info-----------------------------------------------------------------------------------------------------------
 
-#define IS_BENCHMARK 0
+#define IS_BENCHMARK 1
 #define DEBUG_INFO !IS_BENCHMARK && 1
 
 //-log-utilities--------------------------------------------------------------------------------------------------------
@@ -77,11 +77,24 @@
 
 #define NEAREST_NEIGHBOR_RANDOM_SIZE 10
 
+// PMX
+// #define GEN_LOG_INTERVAL 0
+// #define GEN_SIZE 500
+// #define GEN_MAX_STABLE 1000000
+// #define GEN_MAX_TIME 18000
+// #define GEN_ELITE_COUNT 50
+// #define GEN_MUT_RATE 0.1
+// #define GEN_MAX_RANK_SELECTION 5
+// #define GEN_MAX 1000
+
 #define GEN_LOG_INTERVAL 0
 #define GEN_SIZE 100
-#define GEN_MAX_STABLE 10000
+#define GEN_MAX_STABLE 1000000
 #define GEN_MAX_TIME 18000
 #define GEN_ELITE_COUNT 10
-#define GEN_MUT_RATE 0.001
-#define GEN_MAX_RANK_SELECTION 10
+#define GEN_MUT_RATE 0.25
+#define GEN_MAX_RANK_SELECTION 2
+#define GEN_MAX 4000
+#define GEN_MULTI_CROSSOVER 1
+
 #endif //MOA2024_CAIXEIRO_VIAJANTE_DEFS_H

@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     Graph *graph = graph_from_tsp(file_path);
     Path *path = NULL;
-    OUTPUT("\n---#----Graph Size: (%i)----#---\n", graph->vertices_num);
+    // OUTPUT("\n---#----Graph Size: (%i)----#---\n", graph->vertices_num);
 
     if (strcmp(build_flag, "--nearest_neighbor") == 0) {
         double before = get_time();
@@ -80,9 +80,25 @@ int main(int argc, char **argv) {
 
     if (strcmp(build_flag, "--genetic_PMX") == 0) {
         double before = get_time();
-        OUTPUT("\nGenetic Algorithm (PMX):\n---#----------#---\n");
+        // OUTPUT("\nGenetic Algorithm (PMX):\n---#----------#---\n");
 
         path = build_genetic_algorithm(graph, 0, PMX_CROSSOVER, GEN_SIZE, GEN_MAX_TIME);
+        double distance = Graph_run_path(graph, path);
+
+        if (!IS_BENCHMARK) {
+            OUTPUT("Edges:\n\n");
+            Path_print(path);
+        }
+
+        OUTPUT("Total Distance: %f\n", distance);
+        OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
+    }
+
+    if (strcmp(build_flag, "--genetic_OX1") == 0) {
+        double before = get_time();
+        // OUTPUT("\nGenetic Algorithm (OX1):\n---#----------#---\n");
+
+        path = build_genetic_algorithm(graph, 0, OX1_CROSSOVER, GEN_SIZE, GEN_MAX_TIME);
         double distance = Graph_run_path(graph, path);
 
         if (!IS_BENCHMARK) {
@@ -94,11 +110,11 @@ int main(int argc, char **argv) {
         OUTPUT("\nTempo decorrido: %lfs\n", get_time() - before);
     }
 
-    if (strcmp(build_flag, "--genetic_OX1") == 0) {
+    if (strcmp(build_flag, "--genetic_OX2") == 0) {
         double before = get_time();
-        OUTPUT("\nGenetic Algorithm (OX1):\n---#----------#---\n");
+        // OUTPUT("\nGenetic Algorithm (OX2):\n---#----------#---\n");
 
-        path = build_genetic_algorithm(graph, 0, OX1_CROSSOVER, GEN_SIZE, GEN_MAX_TIME);
+        path = build_genetic_algorithm(graph, 0, OX2_CROSSOVER, GEN_SIZE, GEN_MAX_TIME);
         double distance = Graph_run_path(graph, path);
 
         if (!IS_BENCHMARK) {

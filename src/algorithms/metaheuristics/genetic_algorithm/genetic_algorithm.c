@@ -36,6 +36,7 @@ static size_t pick_tournament_selection(Population *population);
 static void elite_selection(Population *population, Gene **new_chromosomes);
 static void apply_PMX_crossover(Population *population);
 static void apply_OX1_crossover(Population *population);
+static void apply_OX2_crossover(Population *population);
 
 //-functions------------------------------------------------------------------------------------------------------------
 
@@ -52,7 +53,8 @@ Path *build_genetic_algorithm(Graph *graph, size_t from, CrossoverAlgorithm cros
     double previous_best = DBL_MAX;
     double average_fitness = 0;
 
-    while (stable_gens < GEN_MAX_STABLE && get_time() < start_time + max_time && actual_gen < 100) {
+    OUTPUT("gen,best,avg,stable\n");
+    while (stable_gens < GEN_MAX_STABLE && get_time() < start_time + max_time && actual_gen < GEN_MAX) {
         actual_gen++;
         double actual_best = Population_eval(population, graph);
 
@@ -66,13 +68,13 @@ Path *build_genetic_algorithm(Graph *graph, size_t from, CrossoverAlgorithm cros
                 average_fitness += population->fitness_table[rank] / (double)population->size;
             }
 
-            OUTPUT("GEN %i:\n", actual_gen);
-            OUTPUT("best:\t%lf\n", actual_best);
-            OUTPUT("avg: \t%lf\n", average_fitness);
-            OUTPUT("stable: %i\n\n", stable_gens);
+            OUTPUT("%i,%lf,%lf,%i\n", actual_gen, actual_best, average_fitness, stable_gens);
         }
 
-        Population_crossover(population, crossoverAlgorithm);
+        for (int i = 0; i < GEN_MULTI_CROSSOVER; ++i) {
+            Population_crossover(population, crossoverAlgorithm);
+            Population_eval(population, graph);
+        }
         Population_mutate(population, GEN_MUT_RATE);
 
         if (actual_best >= previous_best) {
@@ -128,7 +130,7 @@ static void Population_generate(Population *population, Graph *graph, size_t fro
             population->chromosomes[i] = Path_to_chromosome(p);
 
             free(p);
-            OUTPUT("Chromosome (%i) generated\n", (int)i);
+            // OUTPUT("Chromosome (%i) generated\n", (int)i);
 
         }
     }
@@ -191,14 +193,14 @@ static Gene *Population_selection(Population *population, SelectionAlgorithm sel
 
 static size_t pick_ranking_selection(Population *population, int32_t last_selection) {
     int32_t sign = last_selection >= 0;
-    uint64_t total_rank = ((GEN_MAX_RANK_SELECTION - sign) * (GEN_MAX_RANK_SELECTION + sign)) / 2;
+    uint64_t total_rank = ((population->size - sign) * (population->size + sign)) / 2;
     uint64_t pick = get_rand(total_rank);
     uint64_t sum = 0;
 
-    for (size_t i = 0; i < GEN_MAX_RANK_SELECTION; i++) {
+    for (size_t i = 0; i < population->size; i++) {
         if (last_selection >= 0 && (size_t)last_selection == population->ranking_table[i]) continue;
 
-        sum += (GEN_MAX_RANK_SELECTION - i);
+        sum += (population->size - i);
         if (sum >= pick) {
             // PRINT("pick randonly: [%li] (rand: %li)", population->ranking_table[i], pick);
 
@@ -235,6 +237,9 @@ static void Population_crossover(Population *population, CrossoverAlgorithm cros
         case OX1_CROSSOVER:
             apply_OX1_crossover(population);
             break;
+        case OX2_CROSSOVER:
+            apply_OX2_crossover(population);
+            break;
         default:
             RAISE("Crossover (%i) not implemented", crossoverAlgorithm);
     }
@@ -246,25 +251,27 @@ static void apply_PMX_crossover(Population *population) {
 
     for (size_t i = GEN_ELITE_COUNT; i < population->size; i += 2) {
         int32_t last_selection = -1;
-        Gene *parent1 = Population_selection(population, RANKING_SELECTION, &last_selection);
-        Gene *parent2 = Population_selection(population, RANKING_SELECTION, &last_selection);
+        Gene *parent1 = Population_selection(population, TOURNAMENT_SELECTION, &last_selection);
+        Gene *parent2 = Population_selection(population, TOURNAMENT_SELECTION, &last_selection);
 
-        size_t cut1 = get_rand(population->length - 1);
-        size_t cut2 = cut1 + 1 + get_rand(population->length - cut1 - 1);
+        size_t i1 = get_rand(population->length - 1);
+        size_t i2 = i1 + 1 + get_rand(population->length - i1 - 1);
 
         Gene *child1 = malloc(sizeof(Gene) * population->length);
         Gene *child2 = malloc(sizeof(Gene) * population->length);
-        memset(child1, -1, sizeof(Gene) * population->length);
-        memset(child2, -1, sizeof(Gene) * population->length);
+        for (size_t j = 0; j < population->length; ++j) {
+            child1[j] = -1;
+            child2[j] = -1;
+        }
 
-        // Copy segment from parents to children
-        for (size_t j = cut1; j <= cut2; ++j) {
+        // Copia segmento do PMX
+        for (size_t j = i1; j <= i2; ++j) {
             child1[j] = parent1[j];
             child2[j] = parent2[j];
         }
 
-        // Mapping process
-        for (size_t j = cut1; j <= cut2; ++j) {
+        // Mapeamento e preenchimento
+        for (size_t j = i1; j <= i2; ++j) {
             Gene val1 = parent1[j];
             Gene val2 = parent2[j];
 
@@ -280,10 +287,14 @@ static void apply_PMX_crossover(Population *population) {
             }
         }
 
-        // Fill in remaining genes
+        // Preenche os espaços vazios com genes restantes
         for (size_t j = 0; j < population->length; ++j) {
-            if (child1[j] == -1) child1[j] = parent2[j];
-            if (child2[j] == -1) child2[j] = parent1[j];
+            if (child1[j] == -1) {
+                child1[j] = parent2[j];
+            }
+            if (child2[j] == -1) {
+                child2[j] = parent1[j];
+            }
         }
 
         new_chromosomes[i] = child1;
@@ -292,12 +303,15 @@ static void apply_PMX_crossover(Population *population) {
         }
     }
 
+    // Libera memória das antigas gerações
     for (size_t i = GEN_ELITE_COUNT; i < population->size; ++i) {
         free(population->chromosomes[population->ranking_table[i]]);
     }
 
     population->chromosomes = new_chromosomes;
 }
+
+
 
 static void apply_OX1_crossover(Population *population) {
     Gene **new_chromossomes = malloc(sizeof(Gene *) * population->size);
@@ -308,11 +322,6 @@ static void apply_OX1_crossover(Population *population) {
         int32_t last_selection = -1;
         Gene *a = Population_selection(population, TOURNAMENT_SELECTION, &last_selection),
              *b = Population_selection(population, TOURNAMENT_SELECTION, &last_selection);
-
-        // LOG("a: ");
-        // Chromosome_print(a, population->length);
-        // LOG("b: ");
-        // Chromosome_print(b, population->length);
 
         size_t  i1 = get_rand(population->length - 1),
                 i2 = (i1 + 1) + get_rand(population->length - (i1 + 1));
@@ -327,6 +336,12 @@ static void apply_OX1_crossover(Population *population) {
         }
 
         // PRINT("[%li, %li]", i1, i2);
+
+        // LOG("a: ");
+        // Chromosome_print(a, population->length);
+        // LOG("b: ");
+        // Chromosome_print(b, population->length);
+
         for (size_t j = i1; j <= i2; ++j) {
             c[j] = a[j];
             d[j] = b[j];
@@ -355,7 +370,7 @@ static void apply_OX1_crossover(Population *population) {
 
         free(segment_map1.map);
         free(segment_map2.map);
-        //
+
         // LOG("c: ");
         // Chromosome_print(c, population->length);
         //
@@ -378,16 +393,83 @@ static void apply_OX1_crossover(Population *population) {
     population->chromosomes = new_chromossomes;
 }
 
+static void apply_OX2_crossover(Population *population) {
+    Gene **new_chromossomes = malloc(sizeof(Gene *) * population->size);
+
+    elite_selection(population, new_chromossomes);
+
+    for (size_t i = GEN_ELITE_COUNT; i < population->size; i += 2) {
+        int32_t last_selection = -1;
+        Gene *a = Population_selection(population, TOURNAMENT_SELECTION, &last_selection),
+                *b = Population_selection(population, TOURNAMENT_SELECTION, &last_selection);
+
+        Gene *c = malloc(sizeof(Gene) * population->length);
+        Gene *d = malloc(sizeof(Gene) * population->length);
+
+        for (size_t j = 0; j < population->length; ++j) {
+            c[j] = -1;
+            d[j] = -1;
+        }
+
+        size_t genes_to_inherit = population->length / 2;
+        InclusionMap segment_map1 = InclusionMap_new(),
+                segment_map2 = InclusionMap_new();
+
+        for (size_t j = 0; j < genes_to_inherit; ++j) {
+            size_t pos = get_rand(population->length);
+            c[pos] = a[pos];
+            d[pos] = b[pos];
+
+            InclusionMap_set(&segment_map1, c[pos]);
+            InclusionMap_set(&segment_map2, d[pos]);
+        }
+
+        size_t k = 0, l = 0;
+        for (size_t j = 0; j < population->length; ++j) {
+            if (!InclusionMap_has(segment_map1, b[j])) {
+                while (c[k] != -1) k++;
+                c[k] = b[j];
+            }
+
+            if (!InclusionMap_has(segment_map2, a[j])) {
+                while (d[l] != -1) l++;
+                d[l] = a[j];
+            }
+        }
+
+        free(segment_map1.map);
+        free(segment_map2.map);
+
+        new_chromossomes[i] = c;
+        if (i + 1 < population->size) {
+            new_chromossomes[i + 1] = d;
+        }
+    }
+
+    for (size_t i = GEN_ELITE_COUNT; i < population->size; ++i) {
+        size_t rank = population->ranking_table[i];
+        free(population->chromosomes[rank]);
+    }
+
+    population->chromosomes = new_chromossomes;
+}
+
 static void Population_mutate(Population *population, double rate) {
     for (size_t i = GEN_ELITE_COUNT; i < population->size; ++i) {
-        for (size_t j = 0; j < (size_t)((double)population->length * rate); ++j) {
-            size_t a = get_rand(population->length - 1) + 1;
-            size_t b = get_rand(population->length - 1) + 1;
+        // Get the chromosome to mutate
+        Gene *chromosome = population->chromosomes[population->ranking_table[i]];
 
-            swap(
-                &population->chromosomes[i][a],
-                &population->chromosomes[i][b]
-            );
+        if (get_rand_double() < rate) {
+            size_t index1 = get_rand(population->length);
+            size_t index2 = get_rand(population->length);
+
+            while (index2 == index1) {
+                index2 = get_rand(population->length);
+            }
+
+            Gene temp = chromosome[index1];
+            chromosome[index1] = chromosome[index2];
+            chromosome[index2] = temp;
         }
     }
 }

@@ -34,3 +34,7 @@ void swap(int32_t *a, int32_t *b) {
 size_t get_rand(size_t limit) {
     return rand() / (RAND_MAX / limit + 1);
 }
+
+double get_rand_double(void) {
+    return (double)rand() / (double)RAND_MAX;
+}

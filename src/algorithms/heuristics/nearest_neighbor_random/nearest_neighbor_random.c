@@ -34,12 +34,7 @@ static size_t nearest_step(Graph *graph, Path *path, size_t source_idx) {
         lowest_idx[i] = -1;
         lowest_distances[i] = DBL_MAX;
     }
-    // size_t random_idx = 0;
 
-    // do {
-    // random_idx = get_rand(graph->vertices_num);
-
-    // }
     for (size_t i = 0; i < (size_t)graph->vertices_num; ++i) {
         if (i == source_idx || Path_has(path, i)) {
             continue;

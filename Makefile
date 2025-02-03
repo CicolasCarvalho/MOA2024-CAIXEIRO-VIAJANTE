@@ -12,10 +12,10 @@ SRC := ./src/main.c ./src/**/*.c ./src/algorithms/heuristics/**/*.c ./src/algori
 OBJ := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC))
 
 # Compiler flags
-CFLAGS := -Wall -Wextra -Wno-unknown-pragmas -O3 -fopenmp  # -lubsan -fsanitize=undefined -fsanitize=address -Wno-unused-parameter
+CFLAGS := -Wall -Wextra -Wno-unknown-pragmas -O3 -fopenmp #  -lubsan -fsanitize=undefined -fsanitize=address -Wno-unused-parameter
 
 # Build target
-TARGET := $(BUILD_DIR)/out
+TARGET := $(BUILD_DIR)/out2
 
 # Default target
 all: $(TARGET)
@@ -30,6 +30,6 @@ $(TARGET): $(OBJ)
 
 # Clean build directory
 clean:
-	rm $(BUILD_DIR)/out
+	rm $(BUILD_DIR)/out2
 
 .PHONY: all clean
