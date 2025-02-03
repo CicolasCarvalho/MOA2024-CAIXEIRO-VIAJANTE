@@ -28,13 +28,18 @@ Path *build_nearest_neighbor_random(Graph *graph, size_t from) {
 static size_t nearest_step(Graph *graph, Path *path, size_t source_idx) {
     Coord source_coord = Graph_get(graph, source_idx);
 
-    int32_t lowest_idx[NEAREST_NEIGHBOR_RANDOM_SIZE];
+    int64_t lowest_idx[NEAREST_NEIGHBOR_RANDOM_SIZE];
     double lowest_distances[NEAREST_NEIGHBOR_RANDOM_SIZE];
     for (size_t i = 0; i < NEAREST_NEIGHBOR_RANDOM_SIZE; ++i) {
         lowest_idx[i] = -1;
         lowest_distances[i] = DBL_MAX;
     }
+    // size_t random_idx = 0;
 
+    // do {
+    // random_idx = get_rand(graph->vertices_num);
+
+    // }
     for (size_t i = 0; i < (size_t)graph->vertices_num; ++i) {
         if (i == source_idx || Path_has(path, i)) {
             continue;
@@ -50,18 +55,23 @@ static size_t nearest_step(Graph *graph, Path *path, size_t source_idx) {
                     lowest_distances[k] = lowest_distances[k - 1];
                 }
 
-                lowest_idx[j] = i;
+                lowest_idx[j] = (int64_t)i;
                 lowest_distances[j] = distance;
                 break;
             }
         }
     }
 
-    int32_t random_idx;
+    for (int i = 0; i < NEAREST_NEIGHBOR_RANDOM_SIZE; ++i) {
+        // PRINT("%i: [%li] %lf", i, lowest_idx[i], lowest_distances[i]);
+    }
+
+    int64_t random_idx;
     do {
         random_idx = lowest_idx[get_rand(NEAREST_NEIGHBOR_RANDOM_SIZE)];
-        // PRINT("[%i]: %i", random_idx, random_idx);
     } while (random_idx < 0);
+
+    // PRINT("%li", random_idx);
     Path_append(path, random_idx > 0 ? random_idx : -random_idx);
 
     return random_idx;

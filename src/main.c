@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "time.h"
 
 #include "./parser/parser.h"
 #include "./algorithms/heuristics/nearest_neighbor/nearest_neighbor.h"
@@ -21,11 +22,13 @@ char *shift_arg(int *argc, char ***argv);
 
 int main(int argc, char **argv) {
     omp_set_num_threads(8);
+    unsigned int seed = time(NULL) + omp_get_thread_num() * 100;  // Garante uma semente única por thread
+    srand(seed);
 
-#pragma omp parallel
+    #pragma omp parallel
     {
-        int32_t seed = (int32_t) get_time() + omp_get_thread_num() * 100;  // Garante uma semente única por thread
-        srand(seed);
+        unsigned int _seed = time(NULL) + omp_get_thread_num() * 100;  // Garante uma semente única por thread
+        srand(_seed);
     }
 
     shift_arg(&argc, &argv);

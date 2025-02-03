@@ -20,7 +20,8 @@ typedef enum {
 } CrossoverAlgorithm;
 
 typedef enum {
-    RANKING_SELECTION
+    RANKING_SELECTION,
+    TOURNAMENT_SELECTION
 } SelectionAlgorithm;
 
 Path *build_genetic_algorithm(Graph *graph, size_t from, CrossoverAlgorithm crossoverAlgorithm, int population_size, double max_time);

@@ -143,6 +143,7 @@ void InclusionMap_set(InclusionMap *inclusion_map, size_t idx) {
     while (inclusion_idx >= (size_t)inclusion_map->capacity) {
         // PRINT("realloc inclusion map: %i -> %i", inclusion_map->capacity, inclusion_map->capacity * 2);
         void *tmp = realloc(inclusion_map->map, sizeof(char) * inclusion_map->capacity * 2);
+        if (tmp == NULL) { RAISE("StackOverFlow!"); }
         inclusion_map->map = tmp;
         for (size_t i = inclusion_map->capacity; i < (size_t)inclusion_map->capacity * 2; ++i) {
             inclusion_map->map[i] = 0;

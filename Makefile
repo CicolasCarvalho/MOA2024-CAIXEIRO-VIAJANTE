@@ -12,7 +12,7 @@ SRC := ./src/main.c ./src/**/*.c ./src/algorithms/heuristics/**/*.c ./src/algori
 OBJ := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC))
 
 # Compiler flags
-CFLAGS := -Wall -Wextra -Wno-unknown-pragmas -O3 -fopenmp -lubsan -fsanitize=undefined -fsanitize=address -Wno-unused-parameter
+CFLAGS := -Wall -Wextra -Wno-unknown-pragmas -O3 -fopenmp  # -lubsan -fsanitize=undefined -fsanitize=address -Wno-unused-parameter
 
 # Build target
 TARGET := $(BUILD_DIR)/out
